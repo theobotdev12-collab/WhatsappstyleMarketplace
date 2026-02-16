@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { Users } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import type { Chat } from "@/lib/types"
@@ -20,7 +19,8 @@ export function ChatItem({ chat, onTap }: ChatItemProps) {
       style={{ height: 72 }}
     >
       <div className="relative flex-shrink-0">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={chat.avatar}
           alt={chat.name}
           width={48}

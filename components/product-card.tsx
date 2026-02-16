@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { Star } from "lucide-react"
 import type { Product } from "@/lib/types"
 
@@ -21,12 +20,11 @@ export function ProductCard({ product, onTap }: ProductCardProps) {
       className="group flex flex-col overflow-hidden rounded-xl bg-card text-left shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="relative aspect-square w-full overflow-hidden rounded-t-xl">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={product.image}
           alt={product.title}
-          fill
-          className="object-cover transition-transform group-hover:scale-105"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
         />
       </div>
       <div className="flex flex-1 flex-col gap-1 p-3">
