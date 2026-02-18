@@ -5,6 +5,7 @@ import { Plus, ShoppingBag } from "lucide-react"
 import { CategoryCarousel } from "./category-carousel"
 import { ProductCard } from "./product-card"
 import { SearchBar } from "./search-bar"
+import { SellProductDialog } from "./sell-product-dialog"
 import { mockCategories, mockProducts } from "@/lib/mock-data"
 import type { Product } from "@/lib/types"
 
@@ -13,12 +14,18 @@ const ITEMS_PER_PAGE = 6
 export function MarketplaceGrid() {
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("all")
+  const [allProducts, setAllProducts] = useState<Product[]>(mockProducts)
   const [visibleProducts, setVisibleProducts] = useState<Product[]>([])
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
+  const [showSellDialog, setShowSellDialog] = useState(false)
   const loaderRef = useRef<HTMLDivElement>(null)
 
-  const filteredProducts = mockProducts.filter((product) => {
+  const handleProductAdded = (product: Product) => {
+    setAllProducts((prev) => [product, ...prev])
+  }
+
+  const filteredProducts = allProducts.filter((product) => {
     const matchesCategory =
       activeCategory === "all" || product.category === activeCategory
     const matchesSearch = product.title
@@ -66,6 +73,13 @@ export function MarketplaceGrid() {
 
   return (
     <div className="relative flex h-full flex-col bg-background">
+      {/* Sell Product Dialog */}
+      <SellProductDialog
+        open={showSellDialog}
+        onClose={() => setShowSellDialog(false)}
+        onSubmit={handleProductAdded}
+      />
+
       {/* Header */}
       <div className="bg-whatsapp-teal px-4 py-3">
         <div className="flex items-center gap-2">
@@ -116,8 +130,9 @@ export function MarketplaceGrid() {
 
       {/* Floating Action Button */}
       <button
-        className="absolute bottom-4 right-4 z-10 flex items-center gap-2 rounded-full bg-whatsapp-green px-4 py-3 text-white shadow-lg transition-all hover:scale-105 hover:bg-whatsapp-green-dark active:scale-95 sm:px-5 sm:py-3.5"
-        aria-label="Add product"
+        onClick={() => setShowSellDialog(true)}
+        className="absolute bottom-4 right-4 z-10 flex items-center gap-2 rounded-full bg-whatsapp-green px-3 py-2.5 text-white shadow-lg transition-all hover:scale-105 hover:bg-whatsapp-green-dark active:scale-95 sm:px-5 sm:py-3.5 md:bottom-6 md:right-6"
+        aria-label="Sell a product"
       >
         <Plus className="h-5 w-5 sm:h-6 sm:w-6" />
         <span className="text-sm font-semibold sm:text-base">Sell</span>
