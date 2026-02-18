@@ -65,7 +65,7 @@ export function MarketplaceGrid() {
   }
 
   return (
-    <div className="flex h-full flex-col bg-background">
+    <div className="relative flex h-full flex-col bg-background">
       {/* Header */}
       <div className="bg-whatsapp-teal px-4 py-3">
         <div className="flex items-center gap-2">
@@ -116,10 +116,11 @@ export function MarketplaceGrid() {
 
       {/* Floating Action Button */}
       <button
-        className="fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp-green text-white shadow-lg transition-transform hover:scale-105 hover:bg-whatsapp-green-dark active:scale-95"
+        className="absolute bottom-4 right-4 z-10 flex items-center gap-2 rounded-full bg-whatsapp-green px-4 py-3 text-white shadow-lg transition-all hover:scale-105 hover:bg-whatsapp-green-dark active:scale-95 sm:px-5 sm:py-3.5"
         aria-label="Add product"
       >
-        <Plus className="h-6 w-6" />
+        <Plus className="h-5 w-5 sm:h-6 sm:w-6" />
+        <span className="text-sm font-semibold sm:text-base">Sell</span>
       </button>
     </div>
   )

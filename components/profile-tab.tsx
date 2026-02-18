@@ -1,6 +1,26 @@
 "use client"
 
-import { Settings, Package, Heart, Star, HelpCircle, LogOut } from "lucide-react"
+import {
+  Settings,
+  Package,
+  Heart,
+  Star,
+  HelpCircle,
+  LogOut,
+  Sun,
+  Moon,
+  Monitor,
+} from "lucide-react"
+import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
+
+type ThemeOption = "light" | "dark" | "system"
+
+const themeOptions: { value: ThemeOption; label: string; icon: React.ElementType }[] = [
+  { value: "light", label: "Light", icon: Sun },
+  { value: "dark", label: "Dark", icon: Moon },
+  { value: "system", label: "System", icon: Monitor },
+]
 
 const menuItems = [
   { icon: Package, label: "My Listings", count: 5 },
@@ -11,8 +31,15 @@ const menuItems = [
 ]
 
 export function ProfileTab() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
-    <div className="flex h-full flex-col bg-background">
+    <div className="flex h-full flex-col overflow-y-auto bg-background">
       {/* Header */}
       <div className="bg-whatsapp-teal px-4 pb-8 pt-4">
         <h1 className="mb-4 text-lg font-bold text-white">Profile</h1>
@@ -45,8 +72,35 @@ export function ProfileTab() {
         </div>
       </div>
 
+      {/* Theme Selector */}
+      <div className="mx-4 mt-4">
+        <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-whatsapp-text-secondary">
+          Appearance
+        </p>
+        <div className="grid grid-cols-3 gap-2 rounded-xl bg-card p-2">
+          {themeOptions.map((opt) => {
+            const Icon = opt.icon
+            const isActive = mounted && theme === opt.value
+            return (
+              <button
+                key={opt.value}
+                onClick={() => setTheme(opt.value)}
+                className={`flex flex-col items-center gap-1.5 rounded-lg px-3 py-3 text-xs font-medium transition-all ${
+                  isActive
+                    ? "bg-whatsapp-green text-white shadow-sm"
+                    : "text-card-foreground hover:bg-secondary"
+                }`}
+              >
+                <Icon className="h-5 w-5" />
+                <span>{opt.label}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
       {/* Menu */}
-      <div className="mt-4 flex-1">
+      <div className="mt-4 flex-1 pb-4">
         <div className="mx-4 overflow-hidden rounded-xl bg-card">
           {menuItems.map((item, index) => (
             <button

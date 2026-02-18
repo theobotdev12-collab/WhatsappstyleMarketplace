@@ -1,22 +1,38 @@
 "use client"
 
 import { useState } from "react"
-import { Search, MessageSquarePlus } from "lucide-react"
+import { Search, MessageSquarePlus, Users, Plus } from "lucide-react"
 import { ChatItem } from "./chat-item"
 import { ProductCardChat } from "./product-card-chat"
+import { CreateGroupDialog } from "./create-group-dialog"
 import type { Chat } from "@/lib/types"
 import { mockChats } from "@/lib/mock-data"
 
 export function ChatList() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null)
+  const [showGroupDialog, setShowGroupDialog] = useState(false)
+  const [chats, setChats] = useState<Chat[]>(mockChats)
 
-  const filteredChats = mockChats.filter((chat) =>
+  const handleCreateGroup = (name: string, memberIds: string[]) => {
+    const newGroup: Chat = {
+      id: `group-${Date.now()}`,
+      type: "group",
+      name,
+      avatar: `https://i.pravatar.cc/96?img=${Math.floor(Math.random() * 70)}`,
+      lastMessage: `Group created with ${memberIds.length} members`,
+      timestamp: "Just now",
+      unreadCount: 0,
+    }
+    setChats((prev) => [newGroup, ...prev])
+  }
+
+  const filteredChats = chats.filter((chat) =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const handleChatTap = (chatId: string) => {
-    const chat = mockChats.find((c) => c.id === chatId)
+    const chat = chats.find((c) => c.id === chatId)
     if (chat) setSelectedChat(chat)
   }
 
@@ -47,7 +63,7 @@ export function ChatList() {
         </div>
 
         {/* Messages area */}
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto bg-[#ECE5DD] p-4">
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto bg-whatsapp-chat-bg p-4">
           <div className="self-start rounded-lg rounded-tl-none bg-card px-3 py-2 shadow-sm">
             <p className="text-sm text-card-foreground">
               Hey! Check out this product I found:
@@ -100,13 +116,30 @@ export function ChatList() {
   }
 
   return (
-    <div className="flex h-full flex-col bg-card">
+    <div className="relative flex h-full flex-col bg-card">
+      {/* Create Group Dialog */}
+      <CreateGroupDialog
+        open={showGroupDialog}
+        onClose={() => setShowGroupDialog(false)}
+        onCreateGroup={handleCreateGroup}
+      />
+
       {/* Header */}
       <div className="flex items-center justify-between bg-whatsapp-teal px-4 py-3">
         <h1 className="text-lg font-bold text-white">Chats</h1>
-        <button className="text-white/80 transition-colors hover:text-white">
-          <MessageSquarePlus className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowGroupDialog(true)}
+            className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-white/25"
+            aria-label="Create new group"
+          >
+            <Users className="h-3.5 w-3.5" />
+            <span>New Group</span>
+          </button>
+          <button className="text-white/80 transition-colors hover:text-white">
+            <MessageSquarePlus className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       {/* Search */}
