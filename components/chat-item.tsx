@@ -2,7 +2,7 @@
 "use client"
 
 import { Users } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+import { format, isToday, isYesterday } from "date-fns"
 import type { Chat } from "@/lib/types"
 
 interface ChatItemProps {
@@ -10,8 +10,14 @@ interface ChatItemProps {
   onTap: (chatId: string) => void
 }
 
+function formatTimestamp(date: Date): string {
+  if (isToday(date)) return format(date, "h:mm a")
+  if (isYesterday(date)) return "Yesterday"
+  return format(date, "MM/dd/yy")
+}
+
 export function ChatItem({ chat, onTap }: ChatItemProps) {
-  const timeLabel = formatDistanceToNow(chat.timestamp, { addSuffix: false })
+  const timeLabel = formatTimestamp(chat.timestamp)
 
   return (
     <button
