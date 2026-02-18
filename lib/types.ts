@@ -4,7 +4,7 @@ export interface Chat {
   name: string
   avatar: string
   lastMessage: string
-  timestamp: Date
+  timestamp: string
   unreadCount: number
   hasProduct?: boolean
 }
